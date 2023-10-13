@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # To get the ssh_private_key get it from /Users/ivan/.ssh/id_rsa for user imoyano
       - uses: actions/checkout@v2
 
       - name: 🚀 SFTP Deploy
@@ -44,6 +45,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            cd /home/imoyano/apps/xrc_elixir/xrc_api
+            mix ecto.migrate
             cd /home/imoyano/apps/xrc_elixir
             sh start.sh
             ls -al
