@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :xrc_api, XrcApi.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "xrc_api_dev",
-  hostname: "localhost",
+  username: "xrc_user",
+  password: "XRc_Us3r!23",
+  database: "xrc_db",
+  hostname: "opal8.opalstack.com",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -16,7 +16,7 @@ config :xrc_api, XrcApi.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :xrc_api, XrcApiWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: 32693],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

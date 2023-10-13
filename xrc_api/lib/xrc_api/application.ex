@@ -7,6 +7,7 @@ defmodule XrcApi.Application do
 
   def start(_type, _args) do
     children = [
+      {XrcApi.Scheduler, []},
       # Start the Ecto repository
       XrcApi.Repo,
       # Start the Telemetry supervisor

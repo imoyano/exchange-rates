@@ -22,7 +22,10 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 xrc_api-*.tar
 
-config/dev_bkp.exs
+config/*
+
+/.idea
+/.idea/*
 
 # Since we are building assets from assets/,
 # we ignore priv/static. You may want to comment

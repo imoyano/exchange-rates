@@ -19,6 +19,14 @@ config :xrc_api, XrcApiWeb.Endpoint,
   pubsub_server: XrcApi.PubSub,
   live_view: [signing_salt: "Nrervr8W"]
 
+config :xrc_api, XrcApi.Scheduler,
+  jobs: [
+    phoenix_job: [
+      schedule: "* * * * *",
+      task: {XrcApi.Task, :work, []},
+    ]
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

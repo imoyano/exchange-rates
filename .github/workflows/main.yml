@@ -45,7 +45,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            cd /home/imoyano/apps/xrc_elixir
+            sh stop.sh
             cd /home/imoyano/apps/xrc_elixir/xrc_api
+            mix deps.get
+            mix compile
             mix ecto.migrate
             cd /home/imoyano/apps/xrc_elixir
             sh start.sh
