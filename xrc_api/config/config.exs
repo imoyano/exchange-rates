@@ -22,7 +22,7 @@ config :xrc_api, XrcApiWeb.Endpoint,
 config :xrc_api, XrcApi.Scheduler,
   jobs: [
     phoenix_job: [
-      schedule: "* * * * *",
+      schedule: "0 8 * * *",
       task: {XrcApi.Task, :work, []},
     ]
   ]
