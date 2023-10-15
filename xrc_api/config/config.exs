@@ -19,6 +19,19 @@ config :xrc_api, XrcApiWeb.Endpoint,
   pubsub_server: XrcApi.PubSub,
   live_view: [signing_salt: "Nrervr8W"]
 
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+config :logger, :info_log,
+  path: "/tmp/xrc_logs/info.log", # Specify the path to your info-level log file.
+  level: :info
+
+config :logger, :error_log,
+  path: "/tmp/xrc_logs/error.log", # Specify the path to your error-level log file.
+  level: :error
+
 config :xrc_api, XrcApi.Scheduler,
   jobs: [
     phoenix_job: [
@@ -26,11 +39,6 @@ config :xrc_api, XrcApi.Scheduler,
       task: {XrcApi.Task, :work, []},
     ]
   ]
-
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
