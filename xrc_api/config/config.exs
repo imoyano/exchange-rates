@@ -35,7 +35,7 @@ config :logger, :error_log,
 config :xrc_api, XrcApi.Scheduler,
   jobs: [
     phoenix_job: [
-      schedule: "0 11 * * *",
+      schedule: "0 */8 * * *",
       task: {XrcApi.Task, :work, []},
     ]
   ]

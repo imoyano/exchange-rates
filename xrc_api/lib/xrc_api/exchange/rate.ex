@@ -9,6 +9,7 @@ defmodule XrcApi.Exchange.Rate do
     field :currency, :string
     field :rate, :float
     field :date_rate, :string
+    field :base_currency, :string
 
     timestamps()
   end
@@ -16,7 +17,8 @@ defmodule XrcApi.Exchange.Rate do
   @doc false
   def changeset(rate, attrs) do
     rate
-    |> cast(attrs, [:base, :currency, :rate, :date_rate])
-    |> validate_required([:base, :currency, :rate, :date_rate])
+    |> cast(attrs, [:base, :currency, :rate, :date_rate, :base_currency])
+    |> validate_required([:base, :currency, :rate, :date_rate, :base_currency])
+    |> unique_constraint(:base_currency)
   end
 end

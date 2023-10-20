@@ -11,26 +11,28 @@ defmodule XrcApi.Task do
             date_rate = decoded["date"]
             rates = decoded["rates"]
 
-            # Iterate over the rates and insert records into the database
             for {currency, rate} <- rates do
-
+              key = base <> currency
               rate_attrs = %{
                 base: base,
                 currency: currency,
                 rate: rate,
-                date_rate: date_rate
+                date_rate: date_rate,
+                base_currency: key
               }
 
-              # Cast the struct to a changeset for validation
-              changeset = XrcApi.Exchange.Rate.changeset(%XrcApi.Exchange.Rate{}, rate_attrs)
+              result =
+                case XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: key) do
+                  nil  -> XrcApi.Exchange.Rate.changeset(%XrcApi.Exchange.Rate{},rate_attrs)
+                  the_rate -> XrcApi.Exchange.Rate.changeset(the_rate, rate_attrs)
+                end
+                |> XrcApi.Repo.insert_or_update
 
-              case XrcApi.Repo.insert(changeset) do
-                {:ok, _record} ->
-                  IO.puts("Record inserted successfully: #{currency}")
-                {:error, changeset} ->
-                  IO.puts("Failed to insert record: #{currency}")
-                # Handle the error or log it as needed
+              case result do
+                {:ok, model}        -> IO.puts("Inserted or updated with success")
+                {:error, changeset} -> IO.puts("Something went wrong")
               end
+
             end
 
           {:error, _} ->
@@ -40,7 +42,5 @@ defmodule XrcApi.Task do
       {:error, reason} ->
         IO.puts("API call failed: #{inspect(reason)}")
     end
-
-
   end
 end
