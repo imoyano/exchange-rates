@@ -12,7 +12,7 @@ defmodule XrcApi.Task do
             rates = decoded["rates"]
 
             for {currency, rate} <- rates do
-              key = base <> currency
+              key = "#{base}#{currency}"
               rate_attrs = %{
                 base: base,
                 currency: currency,
