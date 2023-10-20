@@ -8,6 +8,7 @@ defmodule XrcApiWeb.Router do
   scope "/api", XrcApiWeb do
     pipe_through :api
     resources "/rates", RateController, except: [:new, :edit]
+    post "/rates/exchange", RateController, :exchange
   end
 
   # Enables LiveDashboard only for development

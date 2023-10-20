@@ -40,4 +40,48 @@ defmodule XrcApiWeb.RateController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  @doc """
+  Calculate the exchange rate.
+
+  Parameters:
+  - amount: Amount to be exchanged
+  - origin_currency: The currency from which the amount is converted
+  - goal_currency: The currency to which the amount is converted
+
+  ## Examples
+
+      iex> exchange(conn, %{amount: 100, origin_currency: "USD", goal_currency: "EUR"})
+      {:ok, %{"result" => 83.33}}
+
+  """
+  def exchange(conn, %{"amount" => amount_str, "origin_currency" => origin_currency, "goal_currency" => goal_currency}) do
+    case calculate_exchange_rate(amount_str, origin_currency, goal_currency) do
+      {:ok, result} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{"result" => result})
+
+      {:error, reason} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{"error" => reason})
+    end
+  end
+
+  defp calculate_exchange_rate(amount_str, origin_currency, goal_currency) do
+    # Convert the amount from a string to a float
+    case Float.parse(amount_str) do
+      {amount, _} when is_float(amount) ->
+        # Calculate the result based on the origin and goal currencies
+        rate_origin = XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: "EUR#{origin_currency}")
+        rate_goal = XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: "EUR#{goal_currency}")
+        result = amount * rate_goal.rate / rate_origin.rate
+
+        {:ok, result}
+
+      _ ->
+        {:error, "Invalid amount"}
+    end
+  end
 end

@@ -101,4 +101,5 @@ defmodule XrcApi.Exchange do
   def change_rate(%Rate{} = rate, attrs \\ %{}) do
     Rate.changeset(rate, attrs)
   end
+
 end
