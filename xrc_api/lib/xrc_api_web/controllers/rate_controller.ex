@@ -78,7 +78,7 @@ defmodule XrcApiWeb.RateController do
         rate_goal = XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: "EUR#{goal_currency}")
         result = amount * rate_goal.rate / rate_origin.rate
 
-        {:ok, result}
+        {:ok, Float.round(result, 2)}
 
       _ ->
         {:error, "Invalid amount"}

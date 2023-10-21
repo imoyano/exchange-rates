@@ -1,8 +1,45 @@
 defmodule XrcApiWeb.Router do
   use XrcApiWeb, :router
+#
+#  # Add this import at the top of your router module
+#  import Phoenix.Endpoint, only: [serve: 2]
+#
+#  # Inside the router module, in the browser pipeline, add the following line to serve static assets:
+#  pipeline :browser do
+#    # ...
+#    plug(:put_layout, {XrcApiWeb.LayoutView, :app})
+#    plug(:put_root_layout, {XrcApiWeb.LayoutView, :root})
+#    plug(:put_status, :ok)
+#    plug(:put_view, XrcApiWeb.CalculatorView)
+#    plug(:put_flash)
+#    plug(:put_session)
+#    plug(:put_user)
+#    plug(:protect_from_forgery)
+#    plug(:put_secure_browser_headers)
+#
+#    # Add this line to serve static assets from the "priv/static" directory
+#    plug(Plug.Static, at: "/static", from: :xrc_api, gzip: false)
+#  end
+
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+
+    # Add this line to serve static assets from the "priv/static" directory
+    plug(Plug.Static, at: "/static", from: :xrc_api, gzip: false)
+  end
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/", XrcApiWeb do
+    pipe_through :browser
+    get "/", CalculatorController, :index
   end
 
   scope "/api", XrcApiWeb do
