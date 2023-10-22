@@ -33,11 +33,13 @@ Elixir was selected as the primary programming language for this project due to 
 
 ## Data Collection Process
 
-**Currency Converter** collects foreign exchange rate data from an external API to provide accurate and up-to-date information. The data collection process can be visualized in the following diagram:
+**The Currency Converter Application** seamlessly acquires foreign exchange rate data from a trusted external API, [exchangeratesapi.io](https://exchangeratesapi.io/), ensuring users have access to precise and current information. The process of gathering this data is vividly represented in the diagram below:
 
 ![Data Collection Diagram](https://exchange.m1.cl/images/currency_converter.png)
 
-Data is collected 3 times a day using phoenix_job with a scheduler: "0 */8 * * *"
+Data is collected three times a day using Phoenix's `phoenix_job` module with a scheduler set to run at regular intervals, specifically configured as follows: "0 */8 * * *". The collected data is stored within a PostgreSQL database, which serves as the backend for the Currency Converter application. Within this database, the exchange rate information is organized within a table named "rates," designed to accommodate data in a format similar to that illustrated in the image below:
+
+![Rates DB Table](https://exchange.m1.cl/images/rates_table.jpg)
 
 ## CI/CD with GitHub Actions
 
@@ -95,8 +97,89 @@ To start using **Currency Converter**, follow these steps:
    mix test
    ```
 
-## Demo Online
+## API Endpoints
 
-### Web Application
+### Show All Rates
 
-### API
+This endpoint retrieves a list of all available exchange rates.
+
+**Endpoint:**
+```http
+GET /api/rates
+```
+
+**cURL Example:**
+```bash
+curl --location 'https://exchange.m1.cl/api/rates'
+```
+
+### Create a New Rate
+
+Use this endpoint to create a new exchange rate.
+
+**Endpoint:**
+```http
+POST /api/rates
+```
+
+**cURL Example:**
+```bash
+curl --location 'https://exchange.m1.cl/api/rates' \
+--header 'Content-Type: application/json' \
+--data '{
+    "base": "USD",
+    "currency": "CLP",
+    "rate": 1,
+    "date_rate": "2023-10-11",
+    "base_currency": "TEST"
+}'
+```
+
+### Get Rate by ID
+
+This endpoint allows you to retrieve a specific exchange rate by its unique identifier.
+
+**Endpoint:**
+```http
+GET /api/rates/:id
+```
+
+**cURL Example:**
+```bash
+curl --location 'https://exchange.m1.cl/api/rates/47b7f1f8-e31e-4914-80d0-8bd917de88ae'
+```
+
+### Update a Rate
+
+You can use this endpoint to update an existing exchange rate.
+
+**Endpoint:**
+```http
+PUT /api/rates/:id
+```
+
+**cURL Example:**
+```bash
+curl --location --request PUT 'https://exchange.m1.cl/api/rates/47b7f1f8-e31e-4914-80d0-8bd917de88ae' \
+--header 'Content-Type: application/json' \
+--data '{
+    "base": "EUR",
+    "currency": "CLP",
+    "rate": 986.250051,
+    "date_rate": "2023-10-11",
+    "base_currency": "TEST"
+}'
+```
+
+You can interact with these endpoints using cURL as shown in the examples above. These endpoints provide comprehensive functionality for managing exchange rates within the Currency Converter API.
+
+## Web Application Demo Online
+
+As previously mentioned, the web application, developed using the Phoenix framework, is deployed through a Continuous Integration / Continuous Deployment (CI/CD) workflow to a cloud-based service. You can access the application by visiting the following URL: [https://exchange.m1.cl](https://exchange.m1.cl)
+
+![Web Application Demo Online](https://exchange.m1.cl/images/demo.jpg)(https://exchange.m1.cl/)
+
+## License
+This project is open-source and available under the MIT License. Feel free to use and modify it as needed.
+
+We hope you find "Currency Converter" useful for your currency exchange and financial data needs. If you have any questions or feedback, please don't hesitate to reach out. Enjoy using the application!
