@@ -15,7 +15,8 @@ $(document).ready(function() {
       		"origin_currency": $("#origin_currency").val(),
       		"goal_currency": goal_curr
       	}, function(res) {
-      		$("#result").html(`${goal_curr} $${res.result}`);
+			let USDollar = new Intl.NumberFormat('en-US', {style: 'currency',currency: 'USD',});
+      		$("#result").html(`${goal_curr} ${USDollar.format(res.result)}`);
         });
     });
 });
