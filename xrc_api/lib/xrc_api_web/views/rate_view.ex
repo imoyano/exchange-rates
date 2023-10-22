@@ -15,6 +15,7 @@ defmodule XrcApiWeb.RateView do
       base: rate.base,
       currency: rate.currency,
       rate: rate.rate,
-      date_rate: rate.date_rate}
+      date_rate: rate.date_rate,
+      base_currency: rate.base_currency}
   end
 end

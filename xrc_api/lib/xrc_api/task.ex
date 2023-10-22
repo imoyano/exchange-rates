@@ -1,6 +1,5 @@
 defmodule XrcApi.Task do
   def work do
-    # File.write("/tmp/quantum_phoenix.txt", "#{Timex.now}", [:append])
     IO.puts("Cron job started -> #{Timex.now}")
 
     case XrcApi.Currency.ApiCaller.get_data("latest") do

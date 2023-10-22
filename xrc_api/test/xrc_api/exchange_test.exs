@@ -6,9 +6,9 @@ defmodule XrcApi.ExchangeTest do
   describe "rates" do
     alias XrcApi.Exchange.Rate
 
-    @valid_attrs %{base: "some base", currency: "some currency", rate: 120.5, date_rate: "some date_rate"}
-    @update_attrs %{base: "some updated base", currency: "some updated currency", rate: 456.7, date_rate: "some updated date_rate"}
-    @invalid_attrs %{base: nil, currency: nil, rate: nil, date_rate: nil}
+    @valid_attrs %{base: "some base", currency: "some currency", rate: 120.5, date_rate: "some date_rate", base_currency: "EURCLP"}
+    @update_attrs %{base: "some updated base", currency: "some updated currency", rate: 456.7, date_rate: "some updated date_rate", base_currency: "EURCLP"}
+    @invalid_attrs %{base: nil, currency: nil, rate: nil, date_rate: nil, base_currency: nil}
 
     def rate_fixture(attrs \\ %{}) do
       {:ok, rate} =

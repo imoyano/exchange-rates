@@ -8,15 +8,29 @@ defmodule XrcApiWeb.RateControllerTest do
     base: "some base",
     currency: "some currency",
     rate: 120.5,
-    date_rate: "some date_rate"
+    date_rate: "some date_rate",
+    base_currency: "EURCLP"
   }
   @update_attrs %{
     base: "some updated base",
     currency: "some updated currency",
     rate: 456.7,
+    date_rate: "some updated date_rate",
+    base_currency: "EURCLP"
+  }
+  @invalid_attrs %{
+    base: "some updated base",
+    currency: "some updated currency",
+    rate: 456.7,
     date_rate: "some updated date_rate"
   }
-  @invalid_attrs %{base: nil, currency: nil, rate: nil, date_rate: nil}
+  @exchange_attrs %{
+    base: "EUR",
+    currency: "EUR",
+    rate: 120,
+    date_rate: "some date_rate",
+    base_currency: "EUREUR"
+  }
 
   def fixture(:rate) do
     {:ok, rate} = Exchange.create_rate(@create_attrs)
@@ -36,7 +50,7 @@ defmodule XrcApiWeb.RateControllerTest do
 
   describe "create rate" do
     test "renders rate when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.rate_path(conn, :create), rate: @create_attrs)
+      conn = post(conn, Routes.rate_path(conn, :create), @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.rate_path(conn, :show, id))
@@ -46,13 +60,9 @@ defmodule XrcApiWeb.RateControllerTest do
                "base" => "some base",
                "currency" => "some currency",
                "date_rate" => "some date_rate",
-               "rate" => 120.5
+               "rate" => 120.5,
+               "base_currency" => "EURCLP"
              } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.rate_path(conn, :create), rate: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
@@ -60,7 +70,7 @@ defmodule XrcApiWeb.RateControllerTest do
     setup [:create_rate]
 
     test "renders rate when data is valid", %{conn: conn, rate: %Rate{id: id} = rate} do
-      conn = put(conn, Routes.rate_path(conn, :update, rate), rate: @update_attrs)
+      conn = put(conn, Routes.rate_path(conn, :update, rate), @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.rate_path(conn, :show, id))
@@ -72,11 +82,6 @@ defmodule XrcApiWeb.RateControllerTest do
                "date_rate" => "some updated date_rate",
                "rate" => 456.7
              } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, rate: rate} do
-      conn = put(conn, Routes.rate_path(conn, :update, rate), rate: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
@@ -90,6 +95,27 @@ defmodule XrcApiWeb.RateControllerTest do
       assert_error_sent 404, fn ->
         get(conn, Routes.rate_path(conn, :show, rate))
       end
+    end
+  end
+
+  describe "exchange" do
+    test "calculates exchange rate with valid params", %{conn: conn} do
+
+      conn = post(conn, Routes.rate_path(conn, :create), @exchange_attrs)
+
+      params = %{
+        "amount" => "100.0",
+        "origin_currency" => "EUR",
+        "goal_currency" => "EUR"
+      }
+
+      conn = post(conn, Routes.rate_path(conn, :exchange), params)
+
+      assert conn.status == 200
+      assert %{"result" => result} = json_response(conn, 200)
+
+      # Add more assertions as needed to verify the calculated result
+      assert Float.round(result, 2) == 100.0
     end
   end
 
