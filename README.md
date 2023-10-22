@@ -177,7 +177,7 @@ You can interact with these endpoints using cURL as shown in the examples above.
 
 As previously mentioned, the web application, developed using the Phoenix framework, is deployed through a Continuous Integration / Continuous Deployment (CI/CD) workflow to a cloud-based service. You can access the application by visiting the following URL: [https://exchange.m1.cl](https://exchange.m1.cl)
 
-![Web Application Demo Online](https://exchange.m1.cl/images/demo.jpg)(https://exchange.m1.cl/)
+![Web Application Demo Online](https://exchange.m1.cl/images/demo.jpg)
 
 ## License
 This project is open-source and available under the MIT License. Feel free to use and modify it as needed.
