@@ -35,7 +35,7 @@ Elixir was selected as the primary programming language for this project due to 
 
 **The Currency Converter Application** seamlessly acquires foreign exchange rate data from a trusted external API, [exchangeratesapi.io](https://exchangeratesapi.io/), ensuring users have access to precise and current information. The process of gathering this data is vividly represented in the diagram below:
 
-![Data Collection Diagram](https://exchange.m1.cl/images/currency_converter.png)
+![Data Collection Diagram](https://exchange.m1.cl/images/currency_converter_diagram.png)
 
 Data is collected three times a day using Phoenix's `phoenix_job` module with a scheduler set to run at regular intervals, specifically configured as follows: "0 */8 * * *". The collected data is stored within a PostgreSQL database, which serves as the backend for the Currency Converter application. Within this database, the exchange rate information is organized within a table named "rates," designed to accommodate data in a format similar to that illustrated in the image below:
 
