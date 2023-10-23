@@ -1,5 +1,6 @@
 defmodule XrcApiWeb.Router do
   use XrcApiWeb, :router
+  use Plug.ErrorHandler
 #
 #  # Add this import at the top of your router module
 #  import Phoenix.Endpoint, only: [serve: 2]
@@ -46,6 +47,11 @@ defmodule XrcApiWeb.Router do
     pipe_through :api
     resources "/rates", RateController, except: [:new, :edit]
     post "/rates/exchange", RateController, :exchange
+  end
+
+  @impl Plug.ErrorHandler
+  def handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+    send_resp(conn, conn.status, "[Currency Converter Application] System error code #{conn.status}.")
   end
 
   # Enables LiveDashboard only for development
