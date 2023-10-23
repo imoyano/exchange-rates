@@ -94,7 +94,11 @@ To start using **Currency Converter**, follow these steps:
 
 6. **Running the unit tests**:
    ```bash
+   # To run all tests
    mix test
+   
+   # To run one specific test
+   mix test test/xrc_api/exchange_rate_service_test.exs
    ```
 
 ## API Endpoints
@@ -168,6 +172,26 @@ curl --location --request PUT 'https://exchange.m1.cl/api/rates/47b7f1f8-e31e-49
     "rate": 986.250051,
     "date_rate": "2023-10-11",
     "base_currency": "TEST"
+}'
+```
+
+### Calculate a Rate Conversion
+
+You can use this endpoint to get an exchange rate conversion between two different currencies.
+
+**Endpoint:**
+```http
+POST /api/rates/exchange
+```
+
+**cURL Example:**
+```bash
+curl --location 'http://localhost:4000/api/rates/exchange' \
+--header 'Content-Type: application/json' \
+--data '{
+    "amount": "100",
+    "origin_currency": "USD",
+    "goal_currency": "CLP"
 }'
 ```
 

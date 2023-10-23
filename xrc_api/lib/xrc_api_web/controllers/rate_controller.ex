@@ -1,6 +1,8 @@
 defmodule XrcApiWeb.RateController do
   use XrcApiWeb, :controller
 
+  alias XrcApi.ExchangeRateService
+
   alias XrcApi.Exchange
   alias XrcApi.Exchange.Rate
 
@@ -56,7 +58,7 @@ defmodule XrcApiWeb.RateController do
 
   """
   def exchange(conn, %{"amount" => amount_str, "origin_currency" => origin_currency, "goal_currency" => goal_currency}) do
-    case calculate_exchange_rate(amount_str, origin_currency, goal_currency) do
+    case ExchangeRateService.calculate_exchange_rate(amount_str, origin_currency, goal_currency) do
       {:ok, result} ->
         conn
         |> put_status(:ok)
@@ -66,22 +68,6 @@ defmodule XrcApiWeb.RateController do
         conn
         |> put_status(:bad_request)
         |> json(%{"error" => reason})
-    end
-  end
-
-  defp calculate_exchange_rate(amount_str, origin_currency, goal_currency) do
-    # Convert the amount from a string to a float
-    case Float.parse(amount_str) do
-      {amount, _} when is_float(amount) ->
-        # Calculate the result based on the origin and goal currencies
-        rate_origin = XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: "EUR#{origin_currency}")
-        rate_goal = XrcApi.Repo.get_by(XrcApi.Exchange.Rate, base_currency: "EUR#{goal_currency}")
-        result = amount * rate_goal.rate / rate_origin.rate
-
-        {:ok, Float.round(result, 2)}
-
-      _ ->
-        {:error, "Invalid amount"}
     end
   end
 end
